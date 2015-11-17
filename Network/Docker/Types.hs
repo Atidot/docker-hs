@@ -259,5 +259,18 @@ instance FromJSON DockerContainer where
 --             CreateContainerResponse <$> (v .: "Id")
 --                 <*> (v .:? "warnings")
 
+data NetworkSettings = NetworkSettings
+                    { _nIPAddress :: IP
+                    } deriving (Show)
+makeLenses ''NetworkSettings
+$(deriveJSON defaultOptions{fieldLabelModifier = drop 2} ''NetworkSettings)
+
+data InspectedContainer = InspectedContainer
+                       { _icNetworkSettings :: NetworkSettings
+                       } deriving (Show)
+
+makeLenses ''InspectedContainer
+$(deriveJSON defaultOptions{fieldLabelModifier = drop 3} ''InspectedContainer)
+
 $(deriveJSON dopts ''DockerVersion)
 

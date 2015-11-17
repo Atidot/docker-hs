@@ -26,7 +26,7 @@ import           Text.Printf                 (printf)
 
 defaultClientOpts :: DockerClientOpts
 defaultClientOpts = DockerClientOpts
-                { apiVersion = "v1.12"
+                { apiVersion = "v1.18"
                 , baseUrl = "http://127.0.0.1:3128/"
                 , ssl = NoSSL
                 }
@@ -136,3 +136,5 @@ getContainerLogs :: DockerClientOpts -> String -> IO (L.ByteString)
 getContainerLogs  clientOpts containerId = (^. responseBody) <$> _dockerGetQuery url clientOpts
         where url = (printf "/containers/%s/logs?stdout=1&stderr=1" containerId)
 
+inspectContainer :: DockerClientOpts -> String -> IO (Maybe InspectedContainer)
+inspectContainer clientOpts containerId = decodeResponse $ _dockerGetQuery (printf "/containers/%s/json" containerId) clientOpts
