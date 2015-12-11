@@ -3,9 +3,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards   #-}
 {-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE DeriveGeneric     #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 
 module Network.Docker.Types where
 
+import           GHC.Generics
 import           Control.Applicative
 import           Control.Lens.TH
 import           Data.Aeson
@@ -30,22 +33,22 @@ type IP = String
 type Port = Int
 type PortType = String
 
-data SSL = NoSSL | SSL SSLOptions deriving Show
+data SSL = NoSSL | SSL SSLOptions deriving (Show, Read, Generic)
 
 data DockerClientOpts = DockerClientOpts {
       apiVersion :: ApiVersion
     , baseUrl    :: URL
     , ssl        :: SSL
-    } deriving (Show)
+    } deriving (Show, Read, Generic)
 
 
 data SSLOptions = SSLOptions {
     optionsKey  :: FilePath
   , optionsCert :: FilePath
-  } deriving Show
+  } deriving (Show, Read, Generic)
 
 
-data ResourceId = ResourceId { _id :: String } deriving (Show, Eq)
+data ResourceId = ResourceId { _id :: String } deriving (Show, Read, Eq, Generic)
 
 
 data DockerImage = DockerImage
