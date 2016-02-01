@@ -97,8 +97,8 @@ getDockerContainers = decodeResponse . _dockerGetQuery "/containers/json"
 getDockerImages :: DockerClientOpts -> IO (Maybe [DockerImage])
 getDockerImages = decodeResponse . _dockerGetQuery "/images/json"
 
-createContainer :: DockerClientOpts -> CreateContainerOpts -> IO(Maybe T.Text)
-createContainer clientOpts createOpts = getOutOfResponse "Id" <$> (_dockerPostQuery "/containers/create" clientOpts createOpts)
+createContainer :: DockerClientOpts -> String -> CreateContainerOpts -> IO(Maybe T.Text)
+createContainer clientOpts name createOpts = getOutOfResponse "Id" <$> (_dockerPostQuery (printf "/containers/create?name=%s" name) clientOpts createOpts)
 
 startContainer :: DockerClientOpts -> String -> StartContainerOpts -> IO(Status)
 startContainer clientOpts containerId startOpts = (^. responseStatus) <$> _dockerPostQuery (printf "/containers/%s/start" containerId) clientOpts startOpts
